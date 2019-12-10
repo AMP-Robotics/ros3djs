@@ -54770,8 +54770,10 @@ var MarkerClient = (function (EventEmitter2) {
   MarkerClient.prototype.checkTime = function checkTime (name){
       var curTime = new Date().getTime();
       if (curTime - this.updatedTime[name] > this.lifetime) {
+        if(this.markers[name]) {
           this.removeMarker(name);
           this.emit('change');
+        }
       } else {
           var that = this;
           setTimeout(function() {that.checkTime(name);},
