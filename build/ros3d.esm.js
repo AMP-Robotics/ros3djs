@@ -54679,8 +54679,7 @@ var MarkerArrayClient = (function (EventEmitter2) {
         if(message.ns + message.id in this.markers) { // "MODIFY"
           updated = this.markers[message.ns + message.id].children[0].update(message);
           if(!updated) { // "REMOVE"
-            this.markers[message.ns + message.id].unsubscribeTf();
-            this.rootObject.remove(this.markers[message.ns + message.id]);
+            this.removeMarker(message.ns + message.id);
           }
         }
         if(!updated) { // "ADD"
@@ -54700,14 +54699,11 @@ var MarkerArrayClient = (function (EventEmitter2) {
         console.warn('Received marker message with deprecated action identifier "1"');
       }
       else if(message.action === 2) { // "DELETE"
-        this.markers[message.ns + message.id].unsubscribeTf();
-        this.rootObject.remove(this.markers[message.ns + message.id]);
-        delete this.markers[message.ns + message.id];
+        this.removeMarker(message.ns + message.id);
       }
       else if(message.action === 3) { // "DELETE ALL"
         for (var m in this$1.markers){
-          this$1.markers[m].unsubscribeTf();
-          this$1.rootObject.remove(this$1.markers[m]);
+          this$1.removeMarker(m);
         }
         this.markers = {};
       }
@@ -54722,6 +54718,15 @@ var MarkerArrayClient = (function (EventEmitter2) {
     if(this.rosTopic){
       this.rosTopic.unsubscribe();
     }
+  };
+  MarkerArrayClient.prototype.removeMarker = function removeMarker (key) {
+    var oldNode = this.markers[key];
+    oldNode.unsubscribeTf();
+    this.rootObject.remove(oldNode);
+    oldNode.children.forEach(function (child) {
+      child.dispose();
+    });
+    delete(this.markers[key]);
   };
 
   return MarkerArrayClient;
