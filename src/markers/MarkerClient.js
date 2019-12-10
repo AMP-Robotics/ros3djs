@@ -46,8 +46,10 @@ ROS3D.MarkerClient.prototype.unsubscribe = function(){
 ROS3D.MarkerClient.prototype.checkTime = function(name){
     var curTime = new Date().getTime();
     if (curTime - this.updatedTime[name] > this.lifetime) {
+      if(this.markers[name]) {
         this.removeMarker(name);
         this.emit('change');
+      }
     } else {
         var that = this;
         setTimeout(function() {that.checkTime(name);},
