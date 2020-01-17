@@ -54721,6 +54721,9 @@ var MarkerArrayClient = (function (EventEmitter2) {
   };
   MarkerArrayClient.prototype.removeMarker = function removeMarker (key) {
     var oldNode = this.markers[key];
+    if(!oldNode) {
+      return;
+    }
     oldNode.unsubscribeTf();
     this.rootObject.remove(oldNode);
     oldNode.children.forEach(function (child) {
@@ -54817,6 +54820,9 @@ var MarkerClient = (function (EventEmitter2) {
   };
   MarkerClient.prototype.removeMarker = function removeMarker (key) {
     var oldNode = this.markers[key];
+    if(!oldNode) {
+      return;
+    }
     oldNode.unsubscribeTf();
     this.rootObject.remove(oldNode);
     oldNode.children.forEach(function (child) {

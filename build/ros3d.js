@@ -54658,6 +54658,9 @@ class MarkerArrayClient extends eventemitter2 {
 
   removeMarker(key) {
     var oldNode = this.markers[key];
+    if(!oldNode) {
+      return;
+    }
     oldNode.unsubscribeTf();
     this.rootObject.remove(oldNode);
     oldNode.children.forEach(child => {
@@ -54771,6 +54774,9 @@ class MarkerClient extends eventemitter2 {
 
   removeMarker(key) {
     var oldNode = this.markers[key];
+    if(!oldNode) {
+      return;
+    }
     oldNode.unsubscribeTf();
     this.rootObject.remove(oldNode);
     oldNode.children.forEach(child => {
